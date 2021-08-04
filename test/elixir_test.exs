@@ -1,8 +1,7 @@
 defmodule ElixirTest do
   use ExUnit.Case
-  doctest Elixir
 
-  test "greets the world" do
-    assert Elixir.hello() == :world
+  test "works" do
+    assert 1 + 1 == 2
   end
 end

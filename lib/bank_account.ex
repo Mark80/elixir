@@ -16,9 +16,12 @@ defmodule BankAccount do
     )
   end
 
-  def deposit(bank_account, movement) do
+
+  def make_operation(bank_account, movement) do
     %BankAccount{
       movements: bank_account.movements ++ [movement]
     }
   end
+
+
 end

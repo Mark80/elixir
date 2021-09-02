@@ -26,7 +26,9 @@ defmodule Math do
   def fn_square do
     fn x -> x * x end
   end
+
 end
+
 
 defmodule Geometry do
   @moduledoc "Module that provide geometry stuff"
@@ -64,4 +66,70 @@ defmodule TodoList do
     |> Stream.filter(fn {_, en} -> en.date == date end)
     |> Enum.map(fn {_, en} -> en end)
   end
+end
+
+defmodule Misc do
+
+  def sync_fn do
+    fn a ->
+      Process.sleep 500
+      "#{a}"
+    end
+  end
+
+end
+
+defmodule PlayGround do
+
+  def start do
+    spawn(fn -> loop(0) end)
+  end
+
+  defp loop(current_value)  do
+    new_value = receive do
+
+      {:view, pid} ->
+        send(pid, {:response, current_value})
+        current_value
+
+      {:add, value} ->
+        current_value + value
+
+      {:less, value} ->
+        current_value - value
+
+
+    end
+    loop(new_value)
+  end
+
+  def value(server_id) do
+    send(server_id, {:view, self()})
+    receive do
+      {:response, current_value} -> current_value
+    end
+  end
+
+  def sum(server_id, value), do: send(server_id, {:add, value})
+  def less(server_id, value), do: send(server_id, {:less, value})
+
+end
+
+defmodule Counter do
+
+  def run() do
+    spawn(fn -> loop(0) end)
+  end
+
+  defp loop(current_value) do
+
+    new_value = receive do
+      v -> current_value + v
+      {:get, pid} -> send(pid, current_value)
+    end
+
+    loop(new_value)
+
+  end
+
 end
